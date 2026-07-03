@@ -1,0 +1,20 @@
+{
+  "name": "slack-agentflow",
+  "version": "1.0.0",
+  "description": "AgentFlow — MCP-Powered Research Agent for Slack. Built for the Slack Agent Builder Challenge.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node --watch app.js"
+  },
+  "keywords": ["slack", "agent", "mcp", "research", "ai", "hackathon"],
+  "author": "AgentFlow Team",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "@slack/bolt": "^4.3.1",
+    "@slack/web-api": "^7.10.0",
+    "dotenv": "^16.4.7",
+    "openai": "^5.8.2"
+  }
+}
