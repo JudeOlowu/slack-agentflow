@@ -1,0 +1,71 @@
+{
+  "display_information": {
+    "name": "AgentFlow",
+    "description": "MCP-Powered Research Agent — Web search, multi-perspective analysis, persistent memory, and channel summarization right in Slack.",
+    "background_color": "#1a1a2e",
+    "long_description": "AgentFlow transforms Slack into an intelligent research command center using Model Context Protocol (MCP) tool orchestration.\n\nCore capabilities:\n• 🔍 Research — Live web search with source extraction and relevance scoring\n• 🏛️ Council — Multi-perspective decision analysis through 5 independent AI advisors with peer review and chairman synthesis\n• 🧠 Memory — Persistent context storage across conversations\n• 📝 Summarize — Channel and thread summarization into structured notes\n\nBuilt with the Slack Bolt SDK and MCP patterns for extensible tool integration."
+  },
+  "features": {
+    "app_home": {
+      "home_tab_enabled": true,
+      "messages_tab_enabled": true,
+      "messages_tab_read_only_enabled": false
+    },
+    "bot_user": {
+      "display_name": "AgentFlow",
+      "always_online": true
+    },
+    "slash_commands": [
+      {
+        "command": "/research",
+        "description": "Research any topic with live web search",
+        "usage_hint": "[topic to research]",
+        "should_escape": false
+      },
+      {
+        "command": "/council",
+        "description": "Multi-perspective analysis on a decision or question",
+        "usage_hint": "[question to analyze]",
+        "should_escape": false
+      },
+      {
+        "command": "/agentflow",
+        "description": "Show AgentFlow help and available tools",
+        "should_escape": false
+      }
+    ]
+  },
+  "oauth_config": {
+    "scopes": {
+      "bot": [
+        "assistant:write",
+        "chat:write",
+        "channels:history",
+        "channels:read",
+        "commands",
+        "app_mentions:read",
+        "im:history",
+        "im:read",
+        "im:write",
+        "search:read"
+      ]
+    }
+  },
+  "settings": {
+    "event_subscriptions": {
+      "bot_events": [
+        "app_mention",
+        "message.channels",
+        "message.im",
+        "assistant_thread_started",
+        "assistant_thread_context_changed"
+      ]
+    },
+    "interactivity": {
+      "is_enabled": true
+    },
+    "org_deploy_enabled": false,
+    "socket_mode_enabled": true,
+    "token_rotation_enabled": false
+  }
+}
