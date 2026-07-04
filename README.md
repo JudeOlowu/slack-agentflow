@@ -19,39 +19,32 @@ Instead of switching between browser tabs, search engines, and AI chatbots, team
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────────────────┐
-│                    Slack Platform                     │
-│  ┌──────────┐  ┌──────────┐  ┌──────────────────┐  │
-│  │ /research │  │ /council │  │ Agent Assistant   │  │
-│  │ command   │  │ command  │  │ (DM / @mention)  │  │
-│  └─────┬─────┘  └─────┬────┘  └────────┬─────────┘  │
-└────────┼──────────────┼───────────────┼─────────────┘
-         │              │               │
-         ▼              ▼               ▼
-┌─────────────────────────────────────────────────────┐
-│              AgentFlow Core (Bolt SDK)               │
-│  ┌──────────────────────────────────────────────┐   │
-│  │           Tool Planner (MCP Client)           │   │
-│  │   Analyzes intent → selects tools → chains    │   │
-│  └──────────┬───────────┬──────────┬─────────┘   │
-│             │           │          │              │
-│  ┌──────────▼┐ ┌────────▼──┐ ┌────▼──────┐     │
-│  │ Research  │ │  Council  │ │  Memory   │      │
-│  │ MCP Server│ │ MCP Server│ │ MCP Server│ ... │
-│  └──────────┘ └───────────┘ └───────────┘      │
-│             │           │          │              │
-│  ┌──────────▼───────────▼──────────▼────────┐   │
-│  │          LLM Synthesis Layer              │   │
-│  │   Combines tool outputs → Slack mrkdwn    │   │
-│  └──────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────┘
-         │                    │
-         ▼                    ▼
-┌──────────────┐    ┌──────────────────┐
-│  Tavily API  │    │  OpenAI / Local  │
-│  (Web Search)│    │  LLM Provider    │
-└──────────────┘    └──────────────────┘
+```mermaid
+graph TD
+    User([User]) -->|DM / @mention / Slash Command| Slack[Slack Platform]
+    
+    subgraph AgentFlow Server (Node.js/Bolt)
+        Slack -->|Events / Command Payload| BoltApp[Bolt SDK App]
+        BoltApp -->|User Query| ToolPlanner[Tool Planner]
+        
+        subgraph MCP Tools
+            ToolPlanner -->|Query Context| ResearchTool[Research Tool]
+            ToolPlanner -->|Question| CouncilTool[Council Tool]
+            ToolPlanner -->|Store / Retrieve| MemoryTool[Memory Tool]
+            ToolPlanner -->|Fetch Conversation| SummarizeTool[Summarize Tool]
+        end
+        
+        ResearchTool -->|Web Results| LLMSynthesis[LLM Synthesis Layer]
+        CouncilTool -->|Advisor Deliberations| LLMSynthesis
+        MemoryTool -->|Context Recall| LLMSynthesis
+        SummarizeTool -->|Thread Notes| LLMSynthesis
+        
+        LLMSynthesis -->|Synthesized mrkdwn| BoltApp
+    end
+    
+    ResearchTool -.->|Search Queries| TavilyAPI[Tavily Search API]
+    LLMSynthesis -.->|Completion Request| OpenAIAPI[OpenAI / Compatible LLM]
+    BoltApp -->|Socket Mode Connection| Slack
 ```
 
 ## 🚀 Quick Start
@@ -63,38 +56,35 @@ Instead of switching between browser tabs, search engines, and AI chatbots, team
 
 ### 1. Clone & Install
 ```bash
-git clone https://github.com/yourusername/slack-agentflow.git
+git clone https://github.com/JudeOlowu/slack-agentflow.git
 cd slack-agentflow
 npm install
 ```
 
-### 2. Create Slack App
-1. Go to [api.slack.com/apps](https://api.slack.com/apps) → **Create New App** → **From scratch**
-2. Name it `AgentFlow` and select your workspace
-3. Enable **Socket Mode** (Settings → Socket Mode → Enable)
-4. Generate an **App-Level Token** with `connections:write` scope
-5. Under **OAuth & Permissions**, add these Bot Token Scopes:
-   - `assistant:write`
-   - `chat:write`
-   - `channels:history`
-   - `channels:read`
-   - `commands`
-   - `app_mentions:read`
-   - `search:read`
-6. Enable **Agents & AI Apps** feature
-7. Create slash commands: `/research`, `/council`, `/agentflow`
-8. Subscribe to events: `app_mention`, `message.channels`, `message.im`, `assistant_thread_started`, `assistant_thread_context_changed`
-9. Install to workspace and copy tokens
+### 2. Create Slack App from Manifest
+1. Go to [api.slack.com/apps](https://api.slack.com/apps) → **Create New App**
+2. Choose **From an app manifest**
+3. Select your workspace (e.g. your Developer Sandbox)
+4. Copy the contents of [manifest.json](manifest.json) in this repository and paste it into the JSON input under the **JSON** tab.
+5. Click **Next**, review the summary, and click **Create**.
+6. Under **Basic Information** > **App Credentials**, copy the **Signing Secret**.
+7. Under **Basic Information** > **App-Level Tokens**, click **Generate Token**, name it, select the `connections:write` scope, and generate. Copy the token starting with `xapp-`.
+8. Under **OAuth & Permissions**, click **Install to Workspace** and authorize it. Once installed, copy the **Bot User OAuth Token** starting with `xoxb-`.
 
 ### 3. Configure Environment
+Create a `.env` file in the root directory:
 ```bash
-cp .env.example .env
-# Edit .env with your tokens
+SLACK_BOT_TOKEN=xoxb-...
+SLACK_SIGNING_SECRET=...
+SLACK_APP_TOKEN=xapp-...
+OPENAI_API_KEY=sk-...
+TAVILY_API_KEY=tvly-...
+PORT=3000
 ```
 
 ### 4. Run
 ```bash
-npm start
+npm run dev
 ```
 
 ## 💡 Usage Examples
