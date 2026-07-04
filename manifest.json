@@ -49,13 +49,10 @@
         "assistant:write",
         "chat:write",
         "channels:history",
-        "channels:read",
-        "commands",
         "app_mentions:read",
         "im:history",
-        "im:read",
-        "im:write",
-        "search:read"
+        "groups:history",
+        "mpim:history"
       ]
     }
   },
@@ -65,6 +62,8 @@
         "app_mention",
         "message.channels",
         "message.im",
+        "message.groups",
+        "message.mpim",
         "assistant_thread_started",
         "assistant_thread_context_changed"
       ]
