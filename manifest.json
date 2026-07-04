@@ -55,7 +55,8 @@
         "app_mentions:read",
         "im:history",
         "groups:history",
-        "mpim:history"
+        "mpim:history",
+        "commands"
       ]
     }
   },
