@@ -1,9 +1,13 @@
 {
+  "_metadata": {
+    "major_version": 1,
+    "minor_version": 1
+  },
   "display_information": {
     "name": "AgentFlow",
-    "description": "MCP-Powered Research Agent — Web search, multi-perspective analysis, persistent memory, and channel summarization right in Slack.",
+    "description": "MCP-Powered Research Agent - Web search, multi-perspective analysis, persistent memory, and channel summarization right in Slack.",
     "background_color": "#1a1a2e",
-    "long_description": "AgentFlow transforms Slack into an intelligent research command center using Model Context Protocol (MCP) tool orchestration.\n\nCore capabilities:\n• 🔍 Research — Live web search with source extraction and relevance scoring\n• 🏛️ Council — Multi-perspective decision analysis through 5 independent AI advisors with peer review and chairman synthesis\n• 🧠 Memory — Persistent context storage across conversations\n• 📝 Summarize — Channel and thread summarization into structured notes\n\nBuilt with the Slack Bolt SDK and MCP patterns for extensible tool integration."
+    "long_description": "AgentFlow transforms Slack into an intelligent research command center using Model Context Protocol (MCP) tool orchestration.\n\nCore capabilities:\n• 🔍 Research - Live web search with source extraction and relevance scoring\n• 🏛️ Council - Multi-perspective decision analysis through 5 independent AI advisors with peer review and chairman synthesis\n• 🧠 Memory - Persistent context storage across conversations\n• 📝 Summarize - Channel and thread summarization into structured notes\n\nBuilt with the Slack Bolt SDK and MCP patterns for extensible tool integration."
   },
   "features": {
     "app_home": {
@@ -14,6 +18,10 @@
     "bot_user": {
       "display_name": "AgentFlow",
       "always_online": true
+    },
+    "assistant_view": {
+      "assistant_description": "AgentFlow transforms Slack into an intelligent research command center using Model Context Protocol (MCP) tool orchestration.",
+      "suggested_prompts": []
     },
     "slash_commands": [
       {
