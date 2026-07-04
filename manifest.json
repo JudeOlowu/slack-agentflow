@@ -26,18 +26,21 @@
     "slash_commands": [
       {
         "command": "/research",
+        "url": "https://example.com/slack/events",
         "description": "Research any topic with live web search",
         "usage_hint": "[topic to research]",
         "should_escape": false
       },
       {
         "command": "/council",
+        "url": "https://example.com/slack/events",
         "description": "Multi-perspective analysis on a decision or question",
         "usage_hint": "[question to analyze]",
         "should_escape": false
       },
       {
         "command": "/agentflow",
+        "url": "https://example.com/slack/events",
         "description": "Show AgentFlow help and available tools",
         "should_escape": false
       }
